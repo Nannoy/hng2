@@ -49,7 +49,7 @@ class User extends Authenticatable implements JWTSubject
     public function createOrganization()
     {
         $organization = Organization::create([
-            'orgId' => \Illuminate\Support\Str::uuid()->toString(),
+            'orgId' => \Illuminate\Support\Str::uuid()->toString()->primary(),
             'name' => $this->firstName . "'s Organization",
             'description' => '',
         ]);

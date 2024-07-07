@@ -18,7 +18,7 @@ class AuthController extends Controller
     $validatedData = $request->validated();
 
     $user = User::create([
-        'userId' => Str::uuid()->toString(), // Use UUID
+        'userId' => Str::uuid()->toString(),
         'firstName' => $validatedData['firstName'],
         'lastName' => $validatedData['lastName'],
         'email' => $validatedData['email'],
