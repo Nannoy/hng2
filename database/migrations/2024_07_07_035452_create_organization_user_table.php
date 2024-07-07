@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('organization_user', function (Blueprint $table) {
             $table->id();
-            $table->string('user_id'); // Define as string to match userId
-            $table->string('organization_id'); // Define as string to match orgId
+            $table->uuid('user_id'); 
+            $table->uuid('organization_id');
             $table->timestamps();
             
             $table->foreign('user_id')->references('userId')->on('users')->onDelete('cascade');
