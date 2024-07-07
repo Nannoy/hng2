@@ -6,8 +6,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
+use App\Models\Organization;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable;
 
@@ -16,10 +18,17 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+    protected $primaryKey = 'userId'; // Specify primary key
+    public $incrementing = true; // enable auto-incrementing
+    protected $keyType = 'string'; // Set key type to string
+
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'userId', 
+        'firstName', 
+        'lastName', 
+        'email', 
+        'password', 
+        'phone',
     ];
 
     /**
@@ -32,6 +41,25 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function organizations()
+    {
+        return $this->belongsToMany(Organization::class, 'organization_user', 'user_id', 'organization_id');
+    }
+
+    public function createOrganization()
+    {
+        $organization = Organization::create([
+            'orgId' => \Illuminate\Support\Str::uuid()->toString(),
+            'name' => $this->firstName . "'s Organization",
+            'description' => '',
+        ]);
+
+        $this->organizations()->attach($organization->orgId);
+
+        return $organization;
+    }
+
+
     /**
      * Get the attributes that should be cast.
      *
@@ -43,5 +71,24 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     *
+     * @return mixed
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
     }
 }
