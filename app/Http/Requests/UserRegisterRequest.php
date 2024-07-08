@@ -40,7 +40,10 @@ class UserRegisterRequest extends FormRequest
         }
 
         throw new HttpResponseException(
-            response()->json(['errors' => $errors], 422)
+            response()->json([
+                'status' => 'Bad request',
+                'message' => 'Registration unsuccessful!'
+            ], 422)
         );
     }
 }

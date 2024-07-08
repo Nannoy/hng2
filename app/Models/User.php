@@ -19,8 +19,9 @@ class User extends Authenticatable implements JWTSubject
      * @var array<int, string>
      */
     protected $primaryKey = 'userId'; // Specify primary key
-    public $incrementing = true; // enable auto-incrementing
+    public $incrementing = false; // Disable auto-incrementing for UUID
     protected $keyType = 'string'; // Set key type to string
+
 
     protected $fillable = [
         'userId', 
